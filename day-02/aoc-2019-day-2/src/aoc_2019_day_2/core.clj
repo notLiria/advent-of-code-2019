@@ -2,7 +2,7 @@
   (:gen-class))
 
 (def filename "commands.csv")
-
+(def max-value 19690720)
 (defn str->int
   [str]
   (Integer. str))
@@ -34,7 +34,7 @@
          updated-arr arr]
     (cond
       ; We reach the end, return the array
-      (or 
+      (or
        (= pos (count updated-arr))
        (= 99 (first ops))) updated-arr
       ; Oh god this is ugly, fix it 
@@ -44,6 +44,32 @@
                (drop (+ pos 4) (take (+ pos 4 4) new-arr))
                new-arr)))))
 
+(defn find-noun
+  [arr]
+  (loop [noun 0
+         mod-arr (apply-ops arr)]
+    (cond
+      (< max-value (first mod-arr)) (- noun 1)
+      (> noun 99) noun
+      :else
+      (recur (+ noun 1) (apply-ops (assoc arr 1 (+ noun 1)))))))
+
+(defn find-verb
+  "Given noun fixed, find verb"
+  [arr]
+  (loop [verb 0
+         mod-arr (apply-ops arr)]
+    (cond 
+      (< max-value (first mod-arr)) (- verb 1)
+      (> verb 99) verb
+      :else
+      (recur (+ verb 1) (apply-ops (assoc arr 2 (+ verb 1)))))))
+
+
+(defn find-noun-and-verb
+  [arr]
+  (let [temp-arr (assoc arr 1 (find-noun arr))]
+    (assoc temp-arr 2 (find-verb temp-arr))))
 
 (defn -main
   "I don't do a whole lot ... yet."
