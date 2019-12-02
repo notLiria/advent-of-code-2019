@@ -17,25 +17,30 @@
   [file]
   (map str->int (parse (slurp file))))
 
-(defn calc-single-ship-fuel-req
-  "Calculates fuel mass based on mass of ship. 
+(defn calc-fuel
+  "Calculates fuel mass based on mass
   Formula is floor(mass/3) - 2 "
   [mass]
   (- (quot mass 3) 2))
 
-(defn calc-fuel-usage-fuel
-  "Calculates the fuel that the fuel would use and so on.
-  Mass: The mass of the ship"
-  [mass]
-  (let [fuel-mass (calc-single-ship-fuel-req mass)]
-    (cond 
-      (< 0 fuel-mass) (+ fuel-mass (calc-fuel-usage-fuel fuel-mass))
-      :else mass)))
+(defn calc-fuel-fuel
+  "Calculates that the fuel that the fuel will use"
+  [fuel-mass]
+  (loop [sum 0 
+         fm fuel-mass]
+    (if (> 0 fm)
+      sum
+      (recur (+ sum fm) (calc-fuel fm)))))
 
 (defn calc-all-ship-fuel-req
   "Calculates fuel mass of all ships"
   [masses]
-  (map calc-single-ship-fuel-req  masses))
+  (map calc-fuel  masses))
+
+(defn calc-all-fuel-fuel
+  "Calculates the fuel that the fuel will use"
+  [fuel-masses]
+  (map calc-fuel-fuel fuel-masses))
 
 (defn -main
   [& args]
