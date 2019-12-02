@@ -1,6 +1,6 @@
 (ns aoc-2019-day-1.core
   (:gen-class))
-
+(use 'clojure.test)
 (def mass-file "masses.txt")
 
 (defn str->int
@@ -41,6 +41,8 @@
   "Calculates the fuel that the fuel will use"
   [fuel-masses]
   (map calc-fuel-fuel fuel-masses))
+
+
 
 (defn -main
   [& args]
