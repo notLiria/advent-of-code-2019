@@ -1,6 +1,5 @@
 (ns aoc-2019-day-1.core
   (:gen-class))
-(use 'clojure.test)
 (def mass-file "masses.txt")
 
 (defn str->int
